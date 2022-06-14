@@ -8,15 +8,29 @@ error_reporting(E_ALL);
 require_once __DIR__ . "/Food.php";
 require_once __DIR__ . "/Game.php";
 require_once __DIR__ . "/Accessory.php";
+require_once __DIR__ . "/User.php";
 
-// $crocchette = new Food("Cibo", "C001", "gatto", "20/12/2023", "7.90");
-// echo $crocchette->printInfo();
+// PRODOTTI
+// Cibo
+$crocchette = new Food("Cibo", "F001", "gatto", "20/12/2022", "5.90");
+$scatoletta_carne = new Food("Cibo", "F002", "cane", "14/07/2022", "3.90");
+// Giocattoli
+$palla = new Game("Giocattolo", "G001", "Piccola", "Gomma", "13.50");
+$pollo = new Game("Giocattolo", "G002", "Media", "Gomma", "8.50");
+// Accessori
+$collare = new Accessory("Accessorio", "A001", "Cane", "Pelle", "14.30");
+$guinzaglio = new Accessory("Accessorio", "A002", "Cane", "Cuoio", "21.90");
 
-// $palla = new Game("Giocattolo", "G001", "Piccola", "Gomma", "13.50");
-// echo $palla->printInfo();
+// ACQUISTI UTENTI 
+$giulia = new User("Giulia", "giulia@gmail.com", "false", "false");
+$giulia ->addProductToCart($scatoletta_carne);
+$giulia ->addProductToCart($collare);
+$giulia ->addProductToCart($pollo);
 
-// $collare = new Accessory("Accessorio", "A001", "Gatto", "Pelle", "14.30");
-// echo $collare->printInfo();
+$arianna = new User("Arianna", "arianna@gmail.com", "true", "true");
+$arianna ->addProductToCart($crocchette);
+$arianna ->addProductToCart($palla);
+$arianna ->addProductToCart($palla);
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +40,8 @@ require_once __DIR__ . "/Accessory.php";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyPet.com</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- 
@@ -38,6 +54,36 @@ require_once __DIR__ . "/Accessory.php";
         BONUS:
         Alcuni prodotti (es. antipulci) avranno la caratteristica che saranno disponibili solo in un periodo particolare (es. da maggio ad agosto).
     -->
+
+    <h2>Prodotti disponibili</h2>
+    <ul class="products">
+        <li> <?php echo $crocchette->printInfo(); ?> </li>
+        <li> <?php echo $scatoletta_carne->printInfo(); ?> </li>
+        <li> <?php echo $palla->printInfo(); ?> </li>
+        <li> <?php echo $pollo->printInfo(); ?> </li>
+        <li> <?php echo $collare->printInfo(); ?> </li>
+        <li> <?php echo $guinzaglio->printInfo(); ?> </li>
+    </ul>
+
+    <!-- Carrello Giulia -->
+    <h2>Ciao <?php echo $giulia->name; ?>. Ecco il tuo carrello:</h2>
+    <ul class="cart">
+        <?php foreach($giulia->cart as $cartItem) { ?>
+        <li><?php echo $cartItem->printInfo(); ?></li>
+        <?php } ?>
+    </ul>
+    <h4>Carta di credito: <?php echo $giulia->checkCreditCard($giulia->credit_card)?></h4>
+    <h3>Totale: € <?php echo $giulia->getTotalPrice($giulia->registered); ?></h3>
+
+    <!-- Carrello Arianna -->
+    <h2>Ciao <?php echo $arianna->name; ?>. Ecco il tuo carrello:</h2>
+    <ul class="cart">
+        <?php foreach($arianna->cart as $cartItem) { ?>
+        <li><?php echo $cartItem->printInfo(); ?></li>
+        <?php } ?>
+    </ul>
+    <h4>Carta di credito: <?php echo $arianna->checkCreditCard($arianna->credit_card)?></h4>
+    <h3>Totale: € <?php echo $arianna->getTotalPrice($arianna->registered); ?></h3>
 
 </body>
 </html>
